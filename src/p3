@@ -1,0 +1,8 @@
+mv ra,02
+mv rb,01
+ml ra,rb
+j1 00
+xr
+cf plik2$,16
+xz
+xd

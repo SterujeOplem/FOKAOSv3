@@ -1,0 +1,10 @@
+mv ra,00
+mv rb,00
+jp 25
+mv ra,16
+mv rb,08
+xc program, p3$
+xy program
+xs program, hello$
+xz
+xd

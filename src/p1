@@ -1,0 +1,11 @@
+mv ra,06
+mv rb,ra
+sb rb,01
+ml ra,rb
+sb rb,01
+j0 18
+cf plik$, 4
+wf plik$, ra
+rf plik$
+xz
+xd
