@@ -84,7 +84,7 @@ public class ProcessManager{
 
         for(PCB it : sAllProcessList){
             if(it.getProcessName().equals(name)){
-               // System.out.println("Istnieje juz obiekt o nazwie" + name);
+                // System.out.println("Istnieje juz obiekt o nazwie" + name);
                 throw  new Exception("Istnieje juz obiekt o nazwie " + name);
             }
         }
@@ -172,8 +172,8 @@ public class ProcessManager{
             System.out.println(e.getMessage());
         }
         //!!!
-            process.setMemUsed(PCB.NO_MEMORY);
-            //System.out.println("Brak pamieci dla procesu "+process.getProcessName());
+        process.setMemUsed(PCB.NO_MEMORY);
+        //System.out.println("Brak pamieci dla procesu "+process.getProcessName());
 
         return process;
     }
@@ -196,15 +196,23 @@ public class ProcessManager{
         }
     }
 
-    public void ProcessTerminate(PCB process){
-        if(ExistProcess(process)){
-            sAllProcessList.remove(process);
-            if(process.getPgid() == 1) {
-                sFirstGroupList.remove(process);
+    public void ProcessTerminate(PCB process) {
+        try {
+            if(ExistProcess(process)) {
+
+                if (process.getPgid() == 1) {
+                    getNextFromG1(process).setPrevInGroup(getPrvFromG1(process));
+                    sFirstGroupList.remove(process);
+                } else {
+                    getNextFromG2(process).setPrevInGroup(getPrvFromG2(process));
+                    sSecondGroupList.remove(process);
+                }
+                getNextFromAll(process).setPrevAll(getPrvFromAll(process));
+                sAllProcessList.remove(process);
             }
-            else{
-                sSecondGroupList.remove(process);
-            }
+
+        }catch(Exception e){
+            System.out.println(e.getMessage() + "Blad w processterminate");
         }
     }
 
@@ -218,6 +226,7 @@ public class ProcessManager{
             else{
                 sSecondGroupList.remove(process);
             }
+
         }
         catch(Exception e){
             System.out.println(e.getMessage());
@@ -245,26 +254,44 @@ public class ProcessManager{
 
     public PCB getPrvFromAll(PCB process) throws Exception {
         int idx = ProcessManager.sAllProcessList.indexOf(process);
-        if (idx < 0){ throw new Exception("Indeks procesu jest < 0!");}
-        return ProcessManager.sAllProcessList.get(idx - 1);
+        if (idx <= 0){ return sAllProcessList.get(sAllProcessList.size()-1);}
+        return ProcessManager.sAllProcessList.get(idx -1 );
     }
 
     public PCB getPrvFromG1(PCB process) throws Exception {
         int idx = ProcessManager.sFirstGroupList.indexOf(process);
-        if (idx < 0){ throw new Exception("(G1)Indeks procesu jest < 0!");}
+        if (idx <= 0){return  sFirstGroupList.get(sFirstGroupList.size()-1);}
         return ProcessManager.sFirstGroupList.get(idx - 1);
     }
 
     public PCB getPrvFromG2(PCB process) throws Exception {
         int idx = ProcessManager.sSecondGroupList.indexOf(process);
-        if (idx < 0){ throw new Exception("(G2)Indeks procesu jest < 0!");}
+        if (idx <= 0){return  sSecondGroupList.get(sSecondGroupList.size()-1);}
         return ProcessManager.sSecondGroupList.get(idx - 1);
+    }
+
+    public PCB getNextFromAll(PCB process) {
+        int idx = ProcessManager.sAllProcessList.indexOf(process);
+        if((idx+1)>= sAllProcessList.size()) return ProcessManager.sAllProcessList.get(0);
+        return ProcessManager.sAllProcessList.get(idx + 1);
+    }
+
+    public PCB getNextFromG1(PCB process) {
+        int idx = ProcessManager.sFirstGroupList.indexOf(process);
+        if((idx+1)>= sFirstGroupList.size()) return ProcessManager.sFirstGroupList.get(0);
+        return ProcessManager.sFirstGroupList.get(idx + 1);
+    }
+
+    public PCB getNextFromG2(PCB process) {
+        int idx = ProcessManager.sSecondGroupList.indexOf(process);
+        if((idx+1)>= sSecondGroupList.size()) return ProcessManager.sSecondGroupList.get(0);
+        return ProcessManager.sSecondGroupList.get(idx + 1);
     }
 
     /********** Debug ********/
     public void printAllProcess(){
         for(PCB it : sAllProcessList){
-                System.out.println(it.getProcessName() +" " + it.getPid() +" "+ it.getPgid() +" "+ it.getPrevAll().getProcessName());
+            System.out.println(it.getProcessName() +" " + it.getPid() +" "+ it.getPgid() +" "+ it.getPrevAll().getProcessName());
         }
     }
     public void printAllProcessInG1(){

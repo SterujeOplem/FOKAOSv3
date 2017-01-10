@@ -164,7 +164,7 @@ public class PCB {
     }
 
     public void setState(State state) {
-        if(state==PCB.State.Ready&&this!=ProcessManager.sAllProcessList.get(0)&&this.getState()!= State.Active)
+        if(state== State.Ready&&this!=ProcessManager.sAllProcessList.get(0)&&this.getState()!= State.Active)
             Scheduler.newReadyProces();
         mState = state;
     }

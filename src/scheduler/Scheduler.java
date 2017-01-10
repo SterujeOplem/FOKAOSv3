@@ -50,6 +50,7 @@ public class Scheduler {
     ///////////////////////////////////////////
     private void Run()
     {
+        boolean wasTerminated=false;
         //Ustawnienie mRunning na wyszukany gotowy proces jeśli został właśnie wytypowany
         if (mRemainTimeQuantum == mTimeQuantum)//Jeśli zostałprzydzilony świeży kwant czasu
         {
@@ -64,18 +65,34 @@ public class Scheduler {
             }
 
             mRunning = mNextTry;
-            mRunning.setState(PCB.State.Active);                //Przejście z stanu Ready do Run
+            if( mRunning.getState()==PCB.State.Terminated )
+            {
+                mRemainTimeQuantum=1;
+                wasTerminated=true;
+            }
+            else
+            {
+                mRunning.setState(PCB.State.Active);                //Przejście z stanu Ready do Run
+            }
             mNextTry = mRunning.getPrevAll();
             find();
         }
-           // KOLEJNOSC TAKA A NIE INNA PONIEWAZ NIE WIEM CO SIE BEDZIE DZIAŁO W EXECUTE WIĘKSZE BEZPIECZEŃSTWO
+        // KOLEJNOSC TAKA A NIE INNA PONIEWAZ NIE WIEM CO SIE BEDZIE DZIAŁO W EXECUTE WIĘKSZE BEZPIECZEŃSTWO
         mRemainTimeQuantum--;                                   //Zmniejszenie pozostałego kwantu czasu
+
         Interpreter.executeInstruction(mRunning);               //Wykonaie 1 rozkazu//Kwestia uzgodnienia jak bedzie uruchamiany proces
         inform();
-        if(mRunning.getState()!=PCB.State.Active)                //Wyjście jeśli proces został zablokowany lub syało się cos innego
-            return;
-        if(mRemainTimeQuantum==0)                                 //Sprawdzenie czy czas się nie skończył
-        mRunning.setState(PCB.State.Ready );                      //Zmiana stanu na Ready aby nie było 2 procesów w stanie Active
+        if(!wasTerminated)
+        {
+            if(mRunning.getState()!=PCB.State.Active)                //Wyjście jeśli proces został zablokowany lub syało się cos innego
+                return;
+            if(mRemainTimeQuantum==0)                                 //Sprawdzenie czy czas się nie skończył
+                mRunning.setState(PCB.State.Ready );                      //Zmiana stanu na Ready aby nie było 2 procesów w stanie Active
+        }
+        else
+        {
+            mNextTry=mRunning.getPrevAll();
+        }
     }
 
 
@@ -90,7 +107,7 @@ public class Scheduler {
             mFinalTry=mNextTry;                             //Ustawienie procesu który zostanie sprawzoy jako ostatni;
             do
             {
-                if(PCB.State.Ready==mNextTry.getState()||mNextTry.getState()==PCB.State.Active)//Sprawdzenie czy proces jest aktywny lub w stanie gotowości
+                if(PCB.State.Ready==mNextTry.getState()||mNextTry.getState()==PCB.State.Active||mNextTry.getState()==PCB.State.Terminated)//Sprawdzenie czy proces jest aktywny lub w stanie gotowości
                 {
                     try {
                         if (mNextTry==ProcessManager.findProcess(1))
@@ -111,7 +128,7 @@ public class Scheduler {
                 else
                 {
 
-              //      System.out.println(mNextTry.getProcessName()+" jest wstrzymany.");//Debug
+                    //      System.out.println(mNextTry.getProcessName()+" jest wstrzymany.");//Debug
                     mNextTry=mNextTry.getPrevAll();            //Przejście do sprawdzenia kolejnego
 
                 }
@@ -164,7 +181,7 @@ public class Scheduler {
                     sNewReadyProces =false;
                     informNewReadyProces();
                     if(mRemainTimeQuantum==0)
-                    informWhatNext();
+                        informWhatNext();
                 }
                 if (mRunning.getState() != PCB.State.Active)//Przypadek gdy wyczerpał się kwant czasu lub wystąpiła operacja P
                 {

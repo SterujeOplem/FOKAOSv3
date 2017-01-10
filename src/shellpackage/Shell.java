@@ -73,7 +73,7 @@ public class Shell {
                 {
                     System.out.println(e.getMessage());
                 }
-            break;
+                break;
             case "cf": //todo tworzy plik o zadanej wielkości i nazwie
                 int size;
                 if(args.isEmpty())break;

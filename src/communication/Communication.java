@@ -35,14 +35,8 @@ public class Communication {
 
         Message msg=new Message(mCurrentProcess,text);
 
-        /**Alokoacja pamięci dla komunikatu, zwraca adres początku pamięci*/
-        //int adres= mMemory.memoryAlloc(msg.getAllSize(), msg.getSender());
-        //if(adres==-1)
-         //   return;
-        /**Zapis komunikatu do pamięci*/
-       //mMemory.memorySetString(adres,msg.getSenderName()+msg.getText());
-        //msg.mAdres=adres;
-        /**Dołączenie adresu komunikatu do kolejki */
+
+        /**Dołączenie  komunikatu do kolejki */
         receiver.mQueue.add(msg);
 
         //boolean wasWaiting = receiver.getState() == PCB.State.Waiting;
@@ -65,28 +59,29 @@ public class Communication {
         mCurrentProcess.setmWasWaitng(false);
         Message message;
         message = (Message) mCurrentProcess.mQueue.remove();
-        /** Wypisuje z pamięci nadawcę i tresc komunikatu*/
-        /*for(int i=message.getAdres(); i<=message.getAdres()+message.getAllSize()-1; i++)
-        {
-            System.out.print(mMemory.memoryGet(i));
-            if(i==message.getAdres()+message.getSenderSize()-1)
-            {
-                System.out.print(" ");
-            }
-        }*/
+
+//        /**Alokoacja pamięci dla komunikatu, zwraca adres początku pamięci*/
+//        int adres= mMemory.memoryAlloc(message.getAllSize(), message.getSender());
+//        if(adres==-1)
+//          return;
+//        /**Zapis komunikatu do pamięci*/
+//        mMemory.memorySetString(adres,message.getSenderName()+message.getText());
+
+
+
         System.out.println(message.getSenderName() + " " +message.getText());
         FileSystem fs = FileSystem.getInstance();
         try {
             String filename = "Wiadomosc" + sMessageOrdinal++;
             fs.createFile(filename);
-            fs.writeToFile(filename, (message.getSenderName() + " " + message.getText()).toCharArray());
-        }
+           fs.writeToFile(filename, (message.getSenderName() + " " + message.getText()).toCharArray());
+       }
         //!!!
         catch(Exception e)
         {}
 
-        //!!!
-        //mMemory.memoryDealloc(message.getAllSize(),message.getAdres(), message.getSender());
+
+
     }
 
 

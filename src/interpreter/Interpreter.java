@@ -85,7 +85,7 @@ public class Interpreter {
         if(process.getPgid() == 0) return;
 
         pullRegisters(process);
-
+        System.out.println("Adress w pamieci "+(mem_addr + p_counter));
         String instruction = readFromMemory(sMemory, mem_addr + p_counter, 2);
         pCounterSteps(3); //rozkaz + spacja = 3 -> p_counter_3Step();
 
@@ -171,7 +171,7 @@ public class Interpreter {
                     arg2+=tmp;
                     wfString(arg1,arg2);
                 }
-                    System.out.println("   wf " + arg1 + ", " + arg2);
+                System.out.println("   wf " + arg1 + ", " + arg2);
                 break;
             case "af":
                 arg1 = readFromMemoryUntil(sMemory, mem_addr + p_counter, ',');
@@ -217,10 +217,10 @@ public class Interpreter {
                 }
                 break;
             case "xd":
-                arg1 = readFromMemoryUntil(sMemory, mem_addr + p_counter, '$');
+                arg1 = readFromMemory(sMemory, mem_addr + p_counter, 2);
                 pCounterSteps(arg1.length() + 1);
                 System.out.println("   xd " + arg1);
-                xd(arg1);
+                xd();
                 break;
             case "xr":
                 System.out.println("   xr " + process.getProcessName());
@@ -249,6 +249,7 @@ public class Interpreter {
             case "xz":
                 System.out.println("   xz " + process.getProcessName());
                 xz(process);
+                pCounterSteps(-1);
                 break;
             default:
                 System.out.println("Wykryto nieznany rozkaz: " + instruction);
@@ -478,7 +479,7 @@ public class Interpreter {
 
     private static void wfString(String filename, String arg){
         try {
-           sFileSystem.writeToFile(filename,arg.toCharArray());
+            sFileSystem.writeToFile(filename,arg.toCharArray());
         } catch (Exception e) {
             System.out.println("Błąd w trakcie zapisu do pliku");
         }
@@ -548,8 +549,8 @@ public class Interpreter {
         //newProcess.setmProgramName(programName);
         //if(newProcess.getMemUsed()!=PCB.NO_MEMORY)
         //{
-         //   for(int i = 0; i < content.length; ++i)
-              //  sMemory.memorySet(newProcess.getMemAdr() + i, content[i]);
+        //   for(int i = 0; i < content.length; ++i)
+        //  sMemory.memorySet(newProcess.getMemAdr() + i, content[i]);
         //}
 
 
@@ -558,9 +559,12 @@ public class Interpreter {
         //newProcess.setState(PCB.State.Ready);
     } //TODO dodać poprawną wielkosc programu, zweryfikować
 
-    private static void xd(String name){
+    private static void xd(){
         try {
-            sProcessManager.ProcessTerminate(sProcessManager.findProcess(name));
+            PCB process =sScheduler.getRunningProces();
+            process.setProgramCounter(process.getMemRequired()); //licznik rozkazów idzie na koniec programu
+            sMemory.memoryDealloc(process.getMemRequired(), process.getMemAdr(), process); //dealokacja pamieci
+            sProcessManager.ProcessTerminate(sScheduler.getRunningProces());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -584,7 +588,7 @@ public class Interpreter {
     private static void xy(String name, String programName){
         try {
             //if(ProcessManager.findProcess(name).getState()==PCB.State.New)
-              //ProcessManager.findProcess(name).setState(PCB.State.Ready);
+            //ProcessManager.findProcess(name).setState(PCB.State.Ready);
             //xy ma uruchamiac tylko procesy NEW !!!
             if(sProcessManager.findProcess(name).getState()==PCB.State.New) {
                 char[] content = sFileSystem.readFromFile(programName);
@@ -614,8 +618,8 @@ public class Interpreter {
     private static void xz(PCB process){
         try {
             process.setState(PCB.State.Terminated);
-            process.setProgramCounter(process.getMemRequired()); //licznik rozkazów idzie na koniec programu
-            sMemory.memoryDealloc(process.getMemRequired(), process.getMemAdr(), process); //dealokacja pamieci
+            //     process.setProgramCounter(process.getMemRequired()); //licznik rozkazów idzie na koniec programu
+            //      sMemory.memoryDealloc(process.getMemRequired(), process.getMemAdr(), process); //dealokacja pamieci
         } catch (Exception e) {
             e.getMessage();
         }

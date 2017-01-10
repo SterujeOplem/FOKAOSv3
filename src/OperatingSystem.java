@@ -65,7 +65,7 @@ public class OperatingSystem{
     }
 
     public static void main(String args[]){
-       OperatingSystem os = new OperatingSystem();
+        OperatingSystem os = new OperatingSystem();
         os.run();
 
 
@@ -212,6 +212,7 @@ public class OperatingSystem{
     rozkaz XD - Sebastian
     wyzwac mp
     GTA V
-    
+    //TURA 3
+    PRZYJZEC SIE USUSWANIU PROCESOW Z KONSOLI - POWODUJE PROBLEMY Z SCALANIEM BLOKOW
      */
 }

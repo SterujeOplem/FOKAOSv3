@@ -67,21 +67,21 @@ public class FileSystem {
                     "mv rb,08" +
                     "xc program$" +
                     "xy program,p3$" +
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
-                    "mv ra,02"+
+                    //"mv ra,02"+
+                    //"mv ra,02"+
+                    //"mv ra,02"+
+//                    "mv ra,02"+
+//                    "mv ra,02"+
+//                    "mv ra,02"+
+//                    "mv ra,02"+
+//                    "mv ra,02"+
+//                    "mv ra,02"+
+//                    "mv ra,02"+
+//                    "mv ra,02"+
+//                    "mv ra,02"+
+//                    "mv ra,02"+
+//                    "mv ra,02"+
+//                    "mv ra,02"+
                     "xs program,hello$" +
                     "xs program,hello2$" +
                     "xz" +
@@ -351,9 +351,9 @@ public class FileSystem {
             fs.mDebugHelper.listFiles();
             System.out.println(fs.mDebugHelper.generateRandomFileContent(10));
             */
-            fs.mDebugHelper.listFiles();
-            fs.mDebugHelper.printDiscDataState();
-       // }
+        fs.mDebugHelper.listFiles();
+        fs.mDebugHelper.printDiscDataState();
+        // }
         //catch(FileSystem.FileSystemException e){
         //    System.out.println(e);
         //}

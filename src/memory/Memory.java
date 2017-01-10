@@ -116,7 +116,7 @@ public class Memory {
                 if (blok.getSize() == 0) {
                     listFree.remove(blok);
                 }
-              //  mMemorySemaphore.V();
+                //  mMemorySemaphore.V();
                 return pom;
             }
 
@@ -151,6 +151,7 @@ public class Memory {
 
     //void memoryDealloc(int size, int start,PCB Process) {
     public void memoryDealloc(int size, int start, PCB process) {
+
         //mMemorySemaphore.P(process);//Tego nie powinno byc
         sortList(listFree);
         sortList(listTaken);
@@ -159,16 +160,22 @@ public class Memory {
 
             if (listTaken.get(i).getBegin() == start && listTaken.get(i).getSize() == size) {
 
-                listManage(listTaken.get(i).getSize(),listTaken.get(i).getBegin(),listFree);
+                listManage(listTaken.get(i).getSize(), listTaken.get(i).getBegin(), listFree);
 
                 listTaken.remove(i);
                 break;
             }
 
+//            if(listTaken.get(i).getSize() == 0)
+//            {
+//                listTaken.remove(i);
+//            }
+
         }
 
         for (int i = 0; i < listFree.size() - 1; i++) {
-
+            sortList(listFree);
+            sortList(listTaken);//profilaktyka
             if (listFree.get(i).getBegin() + listFree.get(i).getSize() == listFree.get(i + 1).getBegin()) {
 
                 FSB pom = new FSB();
@@ -178,35 +185,37 @@ public class Memory {
                 listFree.remove(i + 1);
                 listFree.remove(i);
                 listFree.add(pom);
+                i--;
+
+//                if(listFree.get(i).getSize() == 0)
+//                {
+//                    listFree.remove(i);
+//                }
+
             }
 
         }
 
-        for(int i = start; i < start+size; ++i)
+        for (int i = start; i < start + size; ++i)
             memory[i] = '#';
 
         sortList(listFree);
         sortList(listTaken);
-        if(!mMemorySemaphore.getM_Queue().isEmpty())
-               while( isSize(mMemorySemaphore.getM_Queue().get(0).getMemRequired()))
-               {
-                   try
-                   {
-                       PCB proc = mMemorySemaphore.getM_Queue().get(0);
-                       if(isSize(proc.getMemRequired(),proc)) {
-                           mMemorySemaphore.V();
-                           char[] content = FileSystem.getInstance().readFromFile(proc.getmProgramName());
-                           proc.setMemAdr(memoryAlloc(proc.getMemRequired(), proc));
-                           for (int i = 0; i < content.length; ++i)
-                               memorySet(proc.getMemAdr() + i, content[i]);
-                       }
-                   }
-                   catch (Exception e)
-                   {
-                       System.out.println(e.getMessage());
+        while (!(mMemorySemaphore.getM_Queue().isEmpty()) && isSize(mMemorySemaphore.getM_Queue().get(0).getMemRequired())) {
+            try {
+                PCB proc = mMemorySemaphore.getM_Queue().get(0);
+                if (isSize(proc.getMemRequired(), proc)) {
+                    mMemorySemaphore.V();
+                    char[] content = FileSystem.getInstance().readFromFile(proc.getmProgramName());
+                    proc.setMemAdr(memoryAlloc(proc.getMemRequired(), proc));
+                    for (int i = 0; i < content.length; ++i)
+                        memorySet(proc.getMemAdr() + i, content[i]);
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
 
-                   }
-               }
+            }
+        }
 
     }
 

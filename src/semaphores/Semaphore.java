@@ -29,12 +29,12 @@ public class Semaphore {
         m_Semaphorevalue++;
         if(0 >= m_Semaphorevalue) {
             //if(m_Queue.get(0).getProgramCounter()==0)
-                //m_Queue.get(0).setState(PCB.State.New);//
+            //m_Queue.get(0).setState(PCB.State.New);//
             //else
-                m_Queue.get(0).setState(PCB.State.Ready);//Zmiana stanu procesu waiting->ready
+            m_Queue.get(0).setState(PCB.State.Ready);//Zmiana stanu procesu waiting->ready
             m_Queue.remove(0);
         }
-     //   Scheduler.setVOperationOccour(); //Informacja dla Sebastiana o nowym procesie ready
+        //   Scheduler.setVOperationOccour(); //Informacja dla Sebastiana o nowym procesie ready
     }
 
 
@@ -53,8 +53,8 @@ public class Semaphore {
         if(!m_Queue.isEmpty())
             for(int i=0;i<m_Queue.size();i++){
 
-            System.out.println(i+" "+m_Queue.get(i).getProcessName()+" PID "+m_Queue.get(i).getPid());
-        }
+                System.out.println(i+" "+m_Queue.get(i).getProcessName()+" PID "+m_Queue.get(i).getPid());
+            }
         else
         {
             System.out.println(this.m_Name+" - Kolejka jest pusta");
