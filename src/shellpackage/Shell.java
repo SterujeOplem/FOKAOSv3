@@ -192,11 +192,14 @@ public class Shell {
             case "help":
                 System.out.println("***System Operacyjny Foka***");
                 System.out.println("Dostepne komendy:");
+                System.out.println("af - Dopisanie na końcu pliku");
                 System.out.println("cf - Tworzenie pliku ");
                 System.out.println("df - Usuwanie pliku ");
                 System.out.println("rf - Odczyt pliku");
+                System.out.println("wf - Zapis do pliku");
                 System.out.println("db_memory - Wyswietlanie pamieci operacyjnej ");
                 System.out.println("currproces - Aktualny proces przy procesorze ");
+                System.out.println("go i - wykonuje i rozkazów");
                 //System.out.println("ni - Nastepny rozkaz ");  ???
                 System.out.println("runprog - Utworzenie procesu ");
                 System.out.println("xy - Uruchomienie procesu ");
@@ -208,7 +211,6 @@ public class Shell {
                 System.out.println("db_communicates_quantity - Wyswietlanie ilosci komunikatow w kolejce ");
                 System.out.println("db_list_files - Lista plikow ");
                 System.out.println("db_disc_state - Wyswietlanie stanu przestrzenii dyskowej ");
-                //potrzebny odczyt pliku
                 break;
             default:
                 System.out.println("Błędna komenda");

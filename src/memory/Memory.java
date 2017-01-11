@@ -243,7 +243,7 @@ public class Memory {
             for (FSB blok : listTaken) {
                 if(blok.getSize()==0)
                 {
-                    System.out.println("Początek: 0 Koniec: 0 Rozmiar: 0");
+                   // System.out.println("Początek: 0 Koniec: 0 Rozmiar: 0");
                 }
                 else
                 {

@@ -54,10 +54,17 @@ public class OperatingSystem{
 
         while(true){
             command = sc.nextLine();
-            if(command.startsWith("go") && command.contains(" ")){
-                int num = Integer.parseInt(command.split(" ")[1]);
-                for(int i =0; i < num; ++i)
-                    mScheduler.findAndRun();
+            if(command.startsWith("go")){
+                try
+                {
+                    int num = Integer.parseInt(command.split(" ")[1]);
+                    for(int i =0; i < num; ++i)
+                        mScheduler.findAndRun();
+                }
+                catch (Exception e)
+                {
+                    System.out.println("Błędna Komenda");
+                }
             }
             else
                 mShell.executeCommand(command);

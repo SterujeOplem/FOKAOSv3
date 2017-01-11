@@ -57,8 +57,8 @@ public class FileSystem {
                     "af plik,wynosi $" +
                     "af plik,ra" +
                     "rf plik$" +
-                    "xz" +
-                    "xd").toCharArray());
+                    "xz"
+                    ).toCharArray());
             createFile("p2");
             writeToFile("p2", ("mv ra,00" +
                     "mv rb,00" +
@@ -84,8 +84,8 @@ public class FileSystem {
 //                    "mv ra,02"+
                     "xs program,hello$" +
                     "xs program,hello2$" +
-                    "xz" +
-                    "xd").toCharArray());
+                    "xz"
+                    ).toCharArray());
             createFile("p3");
             writeToFile("p3",("mv ra,02" +
                     "mv rb,01" +
@@ -100,8 +100,8 @@ public class FileSystem {
                     //"mv ra,02"+
                     "xr" +
                     "cf plik2$" +
-                    "xz" +
-                    "xd").toCharArray());
+                    "xz"
+                    ).toCharArray());
         }
         catch(Exception e){}
 

@@ -107,7 +107,7 @@ public class Scheduler {
             mFinalTry=mNextTry;                             //Ustawienie procesu który zostanie sprawzoy jako ostatni;
             do
             {
-                if(PCB.State.Ready==mNextTry.getState()||mNextTry.getState()==PCB.State.Active||mNextTry.getState()==PCB.State.Terminated)//Sprawdzenie czy proces jest aktywny lub w stanie gotowości
+                if(PCB.State.Ready==mNextTry.getState()||mNextTry.getState()==PCB.State.Active)//||mNextTry.getState()==PCB.State.Terminated)//Sprawdzenie czy proces jest aktywny lub w stanie gotowości
                 {
                     try {
                         if (mNextTry==ProcessManager.findProcess(1))

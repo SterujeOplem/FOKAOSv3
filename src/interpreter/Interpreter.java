@@ -216,12 +216,12 @@ public class Interpreter {
                     System.out.println(e.getMessage());
                 }
                 break;
-            case "xd":
-                arg1 = readFromMemory(sMemory, mem_addr + p_counter, 2);
-                pCounterSteps(arg1.length() + 1);
-                System.out.println("   xd " + arg1);
-                xd();
-                break;
+//            case "xd":
+//                arg1 = readFromMemory(sMemory, mem_addr + p_counter, 2);
+//                pCounterSteps(arg1.length() + 1);
+//                System.out.println("   xd " + arg1);
+//                xd();
+//                break;
             case "xr":
                 System.out.println("   xr " + process.getProcessName());
                 xr(process);
@@ -266,8 +266,15 @@ public class Interpreter {
             process.setState(PCB.State.Terminated);
             /**jakiś process kil or something like dat**/
         }
+        printRegister();
     }
 
+    private static void printRegister()
+    {
+        System.out.println("Rejestr A: "+ sScheduler.getRunningProces().getRegA());
+        System.out.println("Rejestr B: "+ sScheduler.getRunningProces().getRegB());
+        System.out.println("Licznik Rozkazów : "+ Integer.toHexString(sScheduler.getRunningProces().getProgramCounter()));
+    }
     private static void mv(String arg1, String arg2){
 
         switch (arg1){
@@ -559,16 +566,16 @@ public class Interpreter {
         //newProcess.setState(PCB.State.Ready);
     } //TODO dodać poprawną wielkosc programu, zweryfikować
 
-    private static void xd(){
-        try {
-            PCB process =sScheduler.getRunningProces();
-            process.setProgramCounter(process.getMemRequired()); //licznik rozkazów idzie na koniec programu
-            sMemory.memoryDealloc(process.getMemRequired(), process.getMemAdr(), process); //dealokacja pamieci
-            sProcessManager.ProcessTerminate(sScheduler.getRunningProces());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }//nie testowane
+//    private static void xd(){
+//        try {
+//            PCB process =sScheduler.getRunningProces();
+//            process.setProgramCounter(process.getMemRequired()); //licznik rozkazów idzie na koniec programu
+//            sMemory.memoryDealloc(process.getMemRequired(), process.getMemAdr(), process); //dealokacja pamieci
+//            sProcessManager.ProcessTerminate(sScheduler.getRunningProces());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }//nie testowane
 
     private static void xr(PCB process){
         //System.out.println("Komunikat procesu " + process.getProcessName() + ": " + sCommunication.read(process));
@@ -618,8 +625,8 @@ public class Interpreter {
     private static void xz(PCB process){
         try {
             process.setState(PCB.State.Terminated);
-            //     process.setProgramCounter(process.getMemRequired()); //licznik rozkazów idzie na koniec programu
-            //      sMemory.memoryDealloc(process.getMemRequired(), process.getMemAdr(), process); //dealokacja pamieci
+                 process.setProgramCounter(process.getMemRequired()); //licznik rozkazów idzie na koniec programu
+                  sMemory.memoryDealloc(process.getMemRequired(), process.getMemAdr(), process); //dealokacja pamieci
         } catch (Exception e) {
             e.getMessage();
         }
